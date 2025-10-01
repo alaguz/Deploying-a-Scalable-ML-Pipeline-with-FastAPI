@@ -1,38 +1,39 @@
-import json
-
 import requests
 
-# TODO: send a GET using the URL http://127.0.0.1:8000
-r = None # Your code here
-
-# TODO: print the status code
-# print()
-# TODO: print the welcome message
-# print()
+BASE_URL = "http://127.0.0.1:8000"
 
 
+def main():
+    # GET root
+    r = requests.get(f"{BASE_URL}/")
+    print("GET / ->", r.status_code, r.json())
 
-data = {
-    "age": 37,
-    "workclass": "Private",
-    "fnlgt": 178356,
-    "education": "HS-grad",
-    "education-num": 10,
-    "marital-status": "Married-civ-spouse",
-    "occupation": "Prof-specialty",
-    "relationship": "Husband",
-    "race": "White",
-    "sex": "Male",
-    "capital-gain": 0,
-    "capital-loss": 0,
-    "hours-per-week": 40,
-    "native-country": "United-States",
-}
+    # Example payload for inference (adjust to your API’s schema later)
+    data = {
+        "age": 37,
+        "workclass": "Private",
+        "fnlgt": 178356,
+        "education": "HS-grad",
+        "education-num": 10,
+        "marital-status": "Married-civ-spouse",
+        "occupation": "Prof-specialty",
+        "relationship": "Husband",
+        "race": "White",
+        "sex": "Male",
+        "capital-gain": 0,
+        "capital-loss": 0,
+        "hours-per-week": 40,
+        "native-country": "United-States",
+    }
 
-# TODO: send a POST using the data above
-r = None # Your code here
+    # POST to inference endpoint (update route/fields once your API is wired)
+    r = requests.post(f"{BASE_URL}/inference", json=data)
+    print("POST /inference ->", r.status_code)
+    try:
+        print(r.json())
+    except Exception:
+        print(r.text)
 
-# TODO: print the status code
-# print()
-# TODO: print the result
-# print()
+
+if __name__ == "__main__":
+    main()

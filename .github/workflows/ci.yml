@@ -1,0 +1,43 @@
+name: CI
+on:
+  push:
+    branches: [ main, master ]
+  pull_requests:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions.checkout@v4
+
+      - name: Set up Miniconda (Python 3.10.18)
+        uses: conda-incubator/setup-miniconda@v3
+        with:
+          activate-environment: fastapi
+          python-version: 3.10.18
+          auto-activate-base: false
+          channels: conda-forge,defaults
+
+      -name: Create/Update env from environment.yml
+        shell: bash -1 {0}
+        run: |
+          if [ -f environment.yml ]; then
+            conda env update -n fastapi -f environment.yml
+          fi
+          conda install -n fastapi -y flake8 pytest
+
+      -name: Show Python & pip
+        shell: bash -1 {0}
+        run: |
+          which python
+          python --version
+          pip --version
+
+      - name: Lint (flake8)
+        shell: bash -1 {0}
+        run: flake8 .
+
+      - name: Run tests (pytest)
+        shell: bash -1 {0}
+        run: pytest -q
